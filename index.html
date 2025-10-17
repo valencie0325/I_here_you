@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语音识别弹幕</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+        #danmaku-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        .danmaku {
+            position: absolute;
+            white-space: nowrap;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            pointer-events: none;
+            animation-duration: 10s; /* 弹幕持续时间 */
+            animation-timing-function: linear;
+            animation-fill-mode: forwards;
+        }
+        /* 随机颜色 */
+        .danmaku.color-1 { color: #ff6b6b; }
+        .danmaku.color-2 { color: #4ecdc4; }
+        .danmaku.color-3 { color: #45b7d1; }
+        .danmaku.color-4 { color: #96ceb4; }
+        .danmaku.color-5 { color: #feca57; }
+        /* 从左到右 */
+        .danmaku.left-to-right {
+            animation-name: leftToRight;
+            left: -100%;
+            top: var(--start-y);
+        }
+        @keyframes leftToRight {
+            to { left: 100%; }
+        }
+        /* 从右到左 */
+        .danmaku.right-to-left {
+            animation-name: rightToLeft;
+            right: -100%;
+            top: var(--start-y);
+        }
+        @keyframes rightToLeft {
+            to { right: 100%; }
+        }
+        /* 从上到下 */
+        .danmaku.top-to-bottom {
+            animation-name: topToBottom;
+            top: -100%;
+            left: var(--start-x);
+        }
+        @keyframes topToBottom {
+            to { top: 100%; }
+        }
+        /* 从下到上 */
+        .danmaku.bottom-to-top {
+            animation-name: bottomToTop;
+            bottom: -100%;
+            left: var(--start-x);
+        }
+        @keyframes bottomToTop {
+            to { bottom: 100%; }
+        }
+        #status {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 1000;
+            color: #fff;
+            background: rgba(0,0,0,0.5);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="danmaku-container"></div>
+    <div id="status">正在监听语音...</div>
+
+    <script>
+        // 检查浏览器支持
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            document.getElementById('status').innerText = '您的浏览器不支持语音识别。请使用 Chrome 等现代浏览器。';
+            throw new Error('SpeechRecognition not supported');
+        }
+
+        const recognition = new SpeechRecognition();
+        const container = document.getElementById('danmaku-container');
+        const status = document.getElementById('status');
+
+        recognition.continuous = true; // 连续识别
+        recognition.interimResults = true; // 显示临时结果
+        recognition.lang = 'en-US'; // 中文识别
+
+        // 随机颜色数组
+        const colors = ['color-1', 'color-2', 'color-3', 'color-4', 'color-5'];
+        // 随机方向数组
+        const directions = ['left-to-right', 'right-to-left', 'top-to-bottom', 'bottom-to-top'];
+
+        function createDanmaku(text) {
+            if (!text || text.trim() === '') return;
+
+            const danmaku = document.createElement('div');
+            danmaku.className = `danmaku ${directions[Math.floor(Math.random() * directions.length)]} ${colors[Math.floor(Math.random() * colors.length)]}`;
+            danmaku.textContent = text;
+
+            // 随机起始位置
+            if (danmaku.classList.contains('left-to-right') || danmaku.classList.contains('right-to-left')) {
+                danmaku.style.setProperty('--start-y', Math.random() * 100 + '%');
+            } else {
+                danmaku.style.setProperty('--start-x', Math.random() * 100 + '%');
+            }
+
+            // 随机动画持续时间（5-15秒）
+            danmaku.style.animationDuration = (Math.random() * 10 + 5) + 's';
+
+            container.appendChild(danmaku);
+
+            // 动画结束后移除元素
+            setTimeout(() => {
+                if (danmaku.parentNode) {
+                    danmaku.parentNode.removeChild(danmaku);
+                }
+            }, 15000); // 稍长于最大动画时间
+        }
+
+        recognition.onresult = function(event) {
+            let interimTranscript = '';
+            let finalTranscript = '';
+
+            for (let i = event.resultIndex; i < event.results.length; ++i) {
+                const result = event.results[i];
+                if (result.isFinal) {
+                    finalTranscript += result[0].transcript;
+                } else {
+                    interimTranscript += result[0].transcript;
+                }
+            }
+
+            // 显示最终结果作为弹幕
+            if (finalTranscript) {
+                createDanmaku(finalTranscript);
+                status.innerText = `识别: ${finalTranscript}`;
+            } else if (interimTranscript) {
+                status.innerText = `临时: ${interimTranscript}`;
+            }
+        };
+
+        recognition.onerror = function(event) {
+            status.innerText = `错误: ${event.error}`;
+            // 自动重启
+            setTimeout(() => {
+                recognition.start();
+            }, 1000);
+        };
+
+        recognition.onstart = function() {
+            status.innerText = '正在监听语音...';
+        };
+
+        recognition.onend = function() {
+            // 自动重启以实现连续监听
+            setTimeout(() => {
+                recognition.start();
+            }, 100);
+        };
+
+        // 自动启动
+        recognition.start();
+    </script>
+</body>
+</html>
