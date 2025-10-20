@@ -56,21 +56,24 @@
 		recognition.continuous = true;
 		recognition.interimResults = false;
 
-		recognition.onresult = (event) => {
+		recognition.onresult = (event) =>
+		{
 			const transcript = event.results[event.results.length - 1][0].transcript;
 			addDanmaku(transcript);
 		};
 
 		recognition.onerror = (event) => console.error('Error:', event.error);
 		recognition.onend = () => recognition.start();
-		function setRandomTextColor(element) {
+		function setRandomTextColor(element)
+		{
 			// Generate random RGB values
 			const r = Math.floor(Math.random() * 256);
 			const g = Math.floor(Math.random() * 256);
 			const b = Math.floor(Math.random() * 256);
 
 			// Ensure the color isn't too close to black (sum of RGB < 50)
-			if (r + g + b < 50) {
+			if (r + g + b < 50)
+			{
 				return setRandomTextColor(element); // Try again if too dark
 			}
 
@@ -81,7 +84,8 @@
 		// Example usage:
 
 
-		function addDanmaku(text) {
+		function addDanmaku(text)
+		{
 			const danmaku = document.createElement('div');
 			danmaku.className = 'danmaku-text';
 			danmaku.textContent = text;
@@ -92,7 +96,8 @@
 
 			let vx = (Math.random() - 0.5) * 4;
 			let vy = (Math.random() - 0.5) * 4;
-			const animate = () => {
+			const animate = () =>
+			{
 				let x = parseFloat(danmaku.style.left);
 				let y = parseFloat(danmaku.style.top);
 				x += vx;
