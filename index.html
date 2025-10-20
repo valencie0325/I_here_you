@@ -4,21 +4,41 @@
 <head>
 	<title>I hear you</title>
 	<script>
-        function checkTimeAndRefresh() {
-            const now = new Date();
-            const hours = now.getHours();
-            const minutes = now.getMinutes();
-            const seconds = now.getSeconds();
+		function checkTimeAndRefresh() {
+			const now = new Date();
+			const hours = now.getHours();
+			const minutes = now.getMinutes();
+			const seconds = now.getSeconds();
 
-            // Check if current time is 8:00:00 AM
-            if (hours === 8 && minutes === 0 && seconds === 0) {
-                location.reload();
-            }
-        }
+			// Check if current time is 8:00:00 AM
+			if (hours === 8 && minutes === 0 && seconds === 0) {
+				location.reload();
+			}
+		}
 
-        // Run check every second
-        setInterval(checkTimeAndRefresh, 1000);
-    </script>
+		// Run check every second
+		setInterval(checkTimeAndRefresh, 1000);
+	</script>
+	<script>
+		function updateDateTime() {
+			const now = new Date();
+			const options = {
+				month: 'long', // Full month name (e.g., October)
+				day: 'numeric', // Day of the month (e.g., 20)
+				year: 'numeric', // Full year (e.g., 2025)
+				hour: '2-digit', // Hour (e.g., 11)
+				minute: '2-digit', // Minute (e.g., 26)
+				second: '2-digit', // Second (e.g., 05)
+				hour12: true // 12-hour format with AM/PM
+			};
+			const dateTimeString = now.toLocaleString('en-US', options);
+			document.getElementById('dateTime').textContent = dateTimeString;
+		}
+
+		// Update immediately and then every second
+		window.onload = updateDateTime;
+		setInterval(updateDateTime, 1000);
+	</script>
 	<style>
 		body {
 			background: #000;
@@ -70,12 +90,23 @@
 			font-size: 36px;
 
 		}
+		#dateTime { 
+			position: fixed;
+			font-size: 20px;
+			font-family: futura;
+			font-style: bold;
+			left: 20px;
+			top: 5px;
+			color:#e35ff2;
+		}
 	</style>
 </head>
 
 <body>
 	<h1 id="hear" style="text-align: center;">I hear you</h1>
 	<h2 id="hear2">Thank you for sharing your healthy thoughts and insights!!</h2>
+	<p id="dateTime"></p>
+
 	<div id="danmaku"></div>
 	<script>
 		const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
@@ -83,24 +114,21 @@
 		recognition.continuous = true;
 		recognition.interimResults = false;
 
-		recognition.onresult = (event) =>
-		{
+		recognition.onresult = (event) => {
 			const transcript = event.results[event.results.length - 1][0].transcript;
 			addDanmaku(transcript);
 		};
 
 		recognition.onerror = (event) => console.error('Error:', event.error);
 		recognition.onend = () => recognition.start();
-		function setRandomTextColor(element)
-		{
+		function setRandomTextColor(element) {
 			// Generate random RGB values
 			const r = Math.floor(Math.random() * 256);
 			const g = Math.floor(Math.random() * 256);
 			const b = Math.floor(Math.random() * 256);
 
 			// Ensure the color isn't too close to black (sum of RGB < 50)
-			if (r + g + b < 50)
-			{
+			if (r + g + b < 50) {
 				return setRandomTextColor(element); // Try again if too dark
 			}
 
@@ -111,8 +139,7 @@
 		// Example usage:
 
 
-		function addDanmaku(text)
-		{
+		function addDanmaku(text) {
 			const danmaku = document.createElement('div');
 			danmaku.className = 'danmaku-text';
 			danmaku.textContent = text;
@@ -126,8 +153,7 @@
 
 			const danmakuRoot = document.getElementById('danmaku')
 			let count = danmakuRoot.childElementCount;
-			if (count > 50)
-			{
+			if (count > 50) {
 				danmakuRoot.removeChild(danmakuRoot.firstChild);
 			}
 
@@ -136,15 +162,13 @@
 			let duration = 1000; // 持续时间 (ms)
 			let startTime = null;
 
-			function animateFontSize(timestamp)
-			{
+			function animateFontSize(timestamp) {
 				if (!startTime) startTime = timestamp;
 				let progress = (timestamp - startTime) / duration;
 				if (progress > 1) progress = 1;
 				let fontSize = startSize + (endSize - startSize) * progress;
 				danmaku.style.fontSize = `${fontSize}px`;
-				if (progress < 1)
-				{
+				if (progress < 1) {
 					requestAnimationFrame(animateFontSize);
 				}
 			}
@@ -153,8 +177,7 @@
 
 			let vx = (Math.random() - 0.5) * 4;
 			let vy = (Math.random() - 0.5) * 4;
-			const animate = () =>
-			{
+			const animate = () => {
 				let x = parseFloat(danmaku.style.left);
 				let y = parseFloat(danmaku.style.top);
 				x += vx;
