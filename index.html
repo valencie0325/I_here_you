@@ -100,8 +100,11 @@
 			const danmaku = document.createElement('div');
 			danmaku.className = 'danmaku-text';
 			danmaku.textContent = text;
-			danmaku.style.left = `${Math.random() * (window.innerWidth - 100)}px`;
-			danmaku.style.top = `${Math.random() * (window.innerHeight - 50)}px`;
+			danmaku.style.position = 'absolute';
+			danmaku.style.left = '50px';
+			danmaku.style.top = '50%';
+			danmaku.style.transform = 'translateY(-50%)';
+			danmaku.style.textAlign = 'left';
 			setRandomTextColor(danmaku);
 			document.getElementById('danmaku').appendChild(danmaku);
 
@@ -111,6 +114,26 @@
 			{
 				danmakuRoot.removeChild(danmakuRoot.firstChild);
 			}
+
+			let startSize = 300; // 初始字体大小 (px)
+			let endSize = 50; // 目标字体大小 (px)
+			let duration = 1000; // 持续时间 (ms)
+			let startTime = null;
+
+			function animateFontSize(timestamp)
+			{
+				if (!startTime) startTime = timestamp;
+				let progress = (timestamp - startTime) / duration;
+				if (progress > 1) progress = 1;
+				let fontSize = startSize + (endSize - startSize) * progress;
+				danmaku.style.fontSize = `${fontSize}px`;
+				if (progress < 1)
+				{
+					requestAnimationFrame(animateFontSize);
+				}
+			}
+
+			requestAnimationFrame(animateFontSize);
 
 			let vx = (Math.random() - 0.5) * 4;
 			let vy = (Math.random() - 0.5) * 4;
