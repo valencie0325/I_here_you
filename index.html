@@ -3,6 +3,22 @@
 
 <head>
 	<title>I hear you</title>
+	<script>
+        function checkTimeAndRefresh() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+
+            // Check if current time is 8:00:00 AM
+            if (hours === 8 && minutes === 0 && seconds === 0) {
+                location.reload();
+            }
+        }
+
+        // Run check every second
+        setInterval(checkTimeAndRefresh, 1000);
+    </script>
 	<style>
 		body {
 			background: #000;
