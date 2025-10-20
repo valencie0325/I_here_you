@@ -105,6 +105,13 @@
 			setRandomTextColor(danmaku);
 			document.getElementById('danmaku').appendChild(danmaku);
 
+			const danmakuRoot = document.getElementById('danmaku')
+			let count = danmakuRoot.childElementCount;
+			if (count > 50)
+			{
+				danmakuRoot.removeChild(danmakuRoot.firstChild);
+			}
+
 			let vx = (Math.random() - 0.5) * 4;
 			let vy = (Math.random() - 0.5) * 4;
 			const animate = () =>
