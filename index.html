@@ -4,14 +4,16 @@
 <head>
 	<title>I hear you</title>
 	<script>
-		function checkTimeAndRefresh() {
+		function checkTimeAndRefresh()
+		{
 			const now = new Date();
 			const hours = now.getHours();
 			const minutes = now.getMinutes();
 			const seconds = now.getSeconds();
 
 			// Check if current time is 8:00:00 AM
-			if (hours === 8 && minutes === 0 && seconds === 0) {
+			if (hours === 8 && minutes === 0 && seconds === 0)
+			{
 				location.reload();
 			}
 		}
@@ -20,7 +22,8 @@
 		setInterval(checkTimeAndRefresh, 1000);
 	</script>
 	<script>
-		function updateDateTime() {
+		function updateDateTime()
+		{
 			const now = new Date();
 			const options = {
 				month: 'long', // Full month name (e.g., October)
@@ -90,17 +93,21 @@
 			font-size: 36px;
 
 		}
-		#dateTime { 
+
+		#dateTime {
 			position: fixed;
-			font-size: 30px;;
+			font-size: 30px;
 			font-family: Neue Haas Unica;
 			left: 20px;
 			top: 5px;
 			color: black;
-			background-color: white; /* White background */
-            display: inline-block; /* Ensures background fits text with padding */
-            padding: 5px 10px; /* Adds space around text to make background slightly larger */
-            border-radius: 0px;
+			background-color: white;
+			/* White background */
+			display: inline-block;
+			/* Ensures background fits text with padding */
+			padding: 5px 10px;
+			/* Adds space around text to make background slightly larger */
+			border-radius: 0px;
 		}
 	</style>
 </head>
@@ -108,17 +115,17 @@
 <body>
 	<h1 id="hear" style="text-align: left;">I hear you</h1>
 	<h2 id="hear2">
-I am an ear<br>open, gentle, and waiting<br>
-I am happy to listen to you<br>
-Please, talk to me<br>
-Your voice, your breath, your thoughts<br>
-they ripple through silence<br>
-becoming part of me<br>
-Thank you for sharing<br>
-your healthy thoughts and quiet insights<br>
-Together, we shape a space<br>
-where listening becomes care<br>
-and sound becomes connection &#128522;&#128522;&#128522;</h2>
+		I am an ear<br>open, gentle, and waiting<br>
+		I am happy to listen to you<br>
+		Please, talk to me<br>
+		Your voice, your breath, your thoughts<br>
+		they ripple through silence<br>
+		becoming part of me<br>
+		Thank you for sharing<br>
+		your healthy thoughts and quiet insights<br>
+		Together, we shape a space<br>
+		where listening becomes care<br>
+		and sound becomes connection &#128522;&#128522;&#128522;</h2>
 	<p id="dateTime"></p>
 
 	<div id="danmaku"></div>
@@ -128,21 +135,24 @@ and sound becomes connection &#128522;&#128522;&#128522;</h2>
 		recognition.continuous = true;
 		recognition.interimResults = false;
 
-		recognition.onresult = (event) => {
+		recognition.onresult = (event) =>
+		{
 			const transcript = event.results[event.results.length - 1][0].transcript;
 			addDanmaku(transcript);
 		};
 
 		recognition.onerror = (event) => console.error('Error:', event.error);
 		recognition.onend = () => recognition.start();
-		function setRandomTextColor(element) {
+		function setRandomTextColor(element)
+		{
 			// Generate random RGB values
 			const r = Math.floor(Math.random() * 256);
 			const g = Math.floor(Math.random() * 256);
 			const b = Math.floor(Math.random() * 256);
 
 			// Ensure the color isn't too close to black (sum of RGB < 50)
-			if (r + g + b < 50) {
+			if (r + g + b < 50)
+			{
 				return setRandomTextColor(element); // Try again if too dark
 			}
 
@@ -153,7 +163,8 @@ and sound becomes connection &#128522;&#128522;&#128522;</h2>
 		// Example usage:
 
 
-		function addDanmaku(text) {
+		function addDanmaku(text)
+		{
 			const danmaku = document.createElement('div');
 			danmaku.className = 'danmaku-text';
 			danmaku.textContent = text;
@@ -167,7 +178,8 @@ and sound becomes connection &#128522;&#128522;&#128522;</h2>
 
 			const danmakuRoot = document.getElementById('danmaku')
 			let count = danmakuRoot.childElementCount;
-			if (count > 50) {
+			if (count > 50)
+			{
 				danmakuRoot.removeChild(danmakuRoot.firstChild);
 			}
 
@@ -176,13 +188,15 @@ and sound becomes connection &#128522;&#128522;&#128522;</h2>
 			let duration = 1000; // 持续时间 (ms)
 			let startTime = null;
 
-			function animateFontSize(timestamp) {
+			function animateFontSize(timestamp)
+			{
 				if (!startTime) startTime = timestamp;
 				let progress = (timestamp - startTime) / duration;
 				if (progress > 1) progress = 1;
 				let fontSize = startSize + (endSize - startSize) * progress;
 				danmaku.style.fontSize = `${fontSize}px`;
-				if (progress < 1) {
+				if (progress < 1)
+				{
 					requestAnimationFrame(animateFontSize);
 				}
 			}
@@ -191,7 +205,8 @@ and sound becomes connection &#128522;&#128522;&#128522;</h2>
 
 			let vx = (Math.random() - 0.5) * 4;
 			let vy = (Math.random() - 0.5) * 4;
-			const animate = () => {
+			const animate = () =>
+			{
 				let x = parseFloat(danmaku.style.left);
 				let y = parseFloat(danmaku.style.top);
 				x += vx;
