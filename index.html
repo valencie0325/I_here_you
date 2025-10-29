@@ -160,8 +160,23 @@
 			element.style.color = `rgb(${r}, ${g}, ${b})`;
 		}
 
-		// Example usage:
-
+		function save(msg)
+		{
+			fetch('save.php', {  // 替换为你的 PHP 文件名
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json; charset=utf-8' },
+				body: JSON.stringify({ message: msg })
+			})
+				.then(r => r.json())
+				.then(data =>
+				{
+					console.log(JSON.stringify(data, null, 2));
+				})
+				.catch(err =>
+				{
+					console.log('错误: ' + err);
+				});
+		}
 
 		function addDanmaku(text)
 		{
@@ -175,7 +190,7 @@
 			danmaku.style.textAlign = 'left';
 			setRandomTextColor(danmaku);
 			document.getElementById('danmaku').appendChild(danmaku);
-
+			save(text)
 			const danmakuRoot = document.getElementById('danmaku')
 			let count = danmakuRoot.childElementCount;
 			if (count > 50)
