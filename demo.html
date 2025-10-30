@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+	<meta charset="UTF-8">
+	<title>碎片拼接游戏</title>
+	<style>
+		#puzzle {
+			width: 300px;
+			height: 300px;
+			border: 2px solid #000;
+			position: relative;
+			margin: 20px auto;
+		}
+
+		.piece {
+			position: absolute;
+			width: 100px;
+			height: 100px;
+			cursor: grab;
+			border: 1px solid #ccc;
+		}
+
+		.piece:active {
+			cursor: grabbing;
+			z-index: 10;
+		}
+
+		#reset {
+			display: block;
+			margin: 10px auto;
+		}
+	</style>
+</head>
+
+<body>
+	<h1 style="text-align:center;">碎片拼接游戏</h1>
+	<div id="puzzle"></div>
+	<button id="reset">重新开始</button>
+
+	<script>
+		const puzzle = document.getElementById('puzzle');
+		const resetBtn = document.getElementById('reset');
+		const size = 3; // 3x3
+		const pieceSize = 100;
+		let pieces = [];
+
+		function init()
+		{
+			puzzle.innerHTML = '';
+			pieces = [];
+			for (let i = 0; i < size * size; i++)
+			{
+				const piece = document.createElement('div');
+				piece.className = 'piece';
+				piece.style.background = `url('https://picsum.photos/300?random=${i}') no-repeat`;
+				piece.style.backgroundPosition = `${-(i % size) * pieceSize}px ${-Math.floor(i / size) * pieceSize}px`;
+				piece.style.backgroundSize = `${size * pieceSize}px`;
+				piece.dataset.index = i;
+				piece.draggable = true;
+				puzzle.appendChild(piece);
+				pieces.push(piece);
+			}
+			shuffle();
+			addDragEvents();
+		}
+
+		function shuffle()
+		{
+			pieces.forEach(p =>
+			{
+				const x = Math.floor(Math.random() * (size - 1)) * pieceSize;
+				const y = Math.floor(Math.random() * (size - 1)) * pieceSize;
+				p.style.left = `${x}px`;
+				p.style.top = `${y}px`;
+			});
+		}
+
+		function addDragEvents()
+		{
+			pieces.forEach(p =>
+			{
+				let offsetX, offsetY;
+				p.addEventListener('dragstart', e =>
+				{
+					offsetX = e.offsetX; offsetY = e.offsetY;
+				});
+				p.addEventListener('dragover', e => e.preventDefault());
+				p.addEventListener('drop', e =>
+				{
+					e.preventDefault();
+					const target = e.target;
+					if (target.classList.contains('piece'))
+					{
+						[p.style.left, target.style.left] = [target.style.left, p.style.left];
+						[p.style.top, target.style.top] = [target.style.top, p.style.top];
+						checkWin();
+					}
+				});
+			});
+		}
+
+		function checkWin()
+		{
+			if (pieces.every(p =>
+			{
+				const i = p.dataset.index;
+				const x = (i % size) * pieceSize;
+				const y = Math.floor(i / size) * pieceSize;
+				return p.style.left === `${x}px` && p.style.top === `${y}px`;
+			})) alert('恭喜完成！');
+		}
+
+		resetBtn.onclick = init;
+		init();
+	</script>
+</body>
+
+</html>

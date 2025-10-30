@@ -162,7 +162,7 @@
 
 		function save(msg)
 		{
-			fetch('save.php', {  // 替换为你的 PHP 文件名
+			fetch('https://hear.wuaze.com/save.php', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json; charset=utf-8' },
 				body: JSON.stringify({ message: msg })
