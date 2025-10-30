@@ -1,0 +1,12 @@
+# 强制服务器对 OPTIONS 请求进行处理
+<IfModule mod_headers>
+    # 针对 OPTIONS 请求设置 CORS 头部
+    RewriteEngine On
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [R=200,L] # 这一行尝试确保请求被处理并返回 200
+
+    # 再次设置 CORS 头部，作为后备和对实际请求的设置
+    Header set Access-Control-Allow-Origin "https://valencie0325.github.io"
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header set Access-Control-Allow-Headers "Content-Type"
+</IfModule>
