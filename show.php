@@ -21,6 +21,24 @@ $offset = ($page - 1) * $limit;
 	<title>I Hear You</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<style>
+		.table-fixed {
+			table-layout: fixed;
+			width: 100%;
+		}
+
+		.col-id {
+			width: 10%;
+		}
+
+		.col-msg {
+			width: 75%;
+		}
+
+		.col-time {
+			width: 15%;
+		}
+	</style>
 </head>
 
 <body class="bg-light">
@@ -91,12 +109,12 @@ $offset = ($page - 1) * $limit;
 			<div class="card-body">
 				<p class="text-muted">Total: <?= $total ?> records</p>
 				<div class="table-responsive">
-					<table class="table table-striped table-hover">
+					<table class="table table-striped table-hover table-fixed">
 						<thead class="table-dark">
 							<tr>
-								<th>ID</th>
-								<th>Message</th>
-								<th>Time</th>
+								<th class="col-id">ID</th>
+								<th class="col-msg">Message</th>
+								<th class="col-time">Time</th>
 							</tr>
 						</thead>
 						<tbody>
