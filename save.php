@@ -22,10 +22,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // config.php - 数据库配置（UTF-8）
-$host = 'sql212.infinityfree.com';
-$user = 'if0_40286528';
-$pass = 'NhUmtR6rjQ';
-$db = 'if0_40286528_hear';
+$host = 'sql208.infinityfree.com';
+$user = 'if0_41322665';
+$pass = 'rG0wvzhJ33ly';
+$db = 'if0_41322665_hear';
 
 try {
 	$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [

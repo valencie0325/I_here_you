@@ -1,9 +1,9 @@
 <?php
 // --- PHP Setup (TOP of file) ---
-$host = 'sql212.infinityfree.com';
-$user = 'if0_40286528';
-$pass = 'NhUmtR6rjQ';
-$db = 'if0_40286528_hear';
+$host = 'sql208.infinityfree.com';
+$user = 'if0_41322665';
+$pass = 'rG0wvzhJ33ly';
+$db = 'if0_41322665_hear';
 
 // Define variables with defaults
 $start = $_GET['start'] ?? date('Y-m-d');  // Default: today

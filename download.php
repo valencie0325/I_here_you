@@ -3,10 +3,10 @@
 header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="messages.csv"');
 
-$host = 'sql212.infinityfree.com';
-$user = 'if0_40286528';
-$pass = 'NhUmtR6rjQ';
-$db = 'if0_40286528_hear';
+$host = 'sql208.infinityfree.com';
+$user = 'if0_41322665';
+$pass = 'rG0wvzhJ33ly';
+$db = 'if0_41322665_hear';
 
 try {
 	$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass, [
